@@ -1,0 +1,2 @@
+-- Demo seed is applied by init-db.js, which hashes the demo passwords.
+-- This file intentionally contains no hard-coded password hashes.

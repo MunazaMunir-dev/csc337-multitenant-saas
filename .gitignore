@@ -1,0 +1,22 @@
+node_modules/
+.env
+.env.local
+dist/
+.DS_Store
+coverage/
+*.log
+
+# Environment secrets
+.env
+.env.*
+!.env.example
+
+# Private certificates
+certs/
+*.pem
+*.key
+
+# Dependencies and build files
+node_modules/
+dist/
+coverage/
