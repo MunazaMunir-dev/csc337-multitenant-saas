@@ -125,17 +125,50 @@ Never trust `x-tenant-id` from an unauthenticated request. For a real SaaS produ
 add tenant provisioning, refresh-token rotation, rate limiting, audit logging, and
 security review.
 
-## 8. Database performance lab
 
-Run the SQL in `database/benchmark.sql` using `psql` or pgAdmin. It contains:
-1. An N+1-style query pattern for demonstration.
-2. A single JOIN replacement.
-3. `EXPLAIN (ANALYZE, BUFFERS)` before and after a composite index.
+## 8. Database Performance Tuning
 
-The seed is intentionally small. For meaningful measurements, generate a larger test
-dataset (for example, tens of thousands of orders), run `ANALYZE`, and compare actual
-execution times on the same machine. Query plans and timings depend on hardware and
-data distribution. Do not copy fabricated timings into your report.
+This project demonstrates the N+1 query problem and its optimized JOIN solution.
+
+### N+1 Query Results
+- Orders retrieved: 4
+- SQL queries executed: 5
+- Execution time: 9.65 ms
+
+### Optimized JOIN Results
+- Orders retrieved: 4
+- SQL queries executed: 1
+- Execution time: 1.40 ms
+
+### Performance Comparison
+
+| Metric | N+1 Query | Optimized JOIN |
+|---|---:|---:|
+| SQL Queries | 5 | 1 |
+| Execution Time | 9.65 ms | 1.40 ms |
+| Orders Retrieved | 4 | 4 |
+
+The optimized JOIN reduced measured execution time by approximately 85.5% in this test.
+
+### API Endpoints
+
+- GET `/api/v1/performance/n-plus-one`
+- GET `/api/v1/performance/optimized`
+
+Both endpoints require JWT authentication.
+
+### Composite Index
+
+```sql
+CREATE INDEX IF NOT EXISTS idx_orders_tenant_created
+ON orders (tenant_id, created_at DESC);
+```
+<img width="1920" height="1080" alt="Screenshot (385)" src="https://github.com/user-attachments/assets/441a3562-b6fb-4441-8e88-4f015c36e6bb" />
+<img width="1920" height="1080" alt="Screenshot (384)" src="https://github.com/user-attachments/assets/87ae1aa1-153c-40e0-be92-63c006bd2636" />
+<img width="1920" height="1080" alt="Screenshot (383)" src="https://github.com/user-attachments/assets/74ef30a0-69c6-4c8a-b15e-c3a5f810f943" />
+<img width="1920" height="1080" alt="Screenshot (382)" src="https://github.com/user-attachments/assets/14de2ab2-bf97-4cb4-a763-b130a699beea" />
+<img width="1920" height="1080" alt="Screenshot (381)" src="https://github.com/user-attachments/assets/67c84f82-e1ff-4c9c-bb18-510480db21a5" />
+
 
 ## 9. Connection pooling
 
